@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bugu.qiniu.dao.FileDao">
+	<resultMap id="BaseResultMap" type="com.qiniu.storage.model.FileInfo">
+		<result column="ID" jdbcType="INTEGER" property="id" />
+		<result column="KEY" jdbcType="VARCHAR" property="key" />
+	</resultMap>
+	<insert id="insert" parameterType="com.qiniu.storage.model.FileInfo">
+		insert into t_file_info (KEY) values (#{key,jdbcType=VARCHAR})
+	</insert>
+	<delete id="delete" parameterType="String">
+		delete from t_file_info where KEY = #{key,jdbcType=VARCHAR}
+	</delete>
+</mapper>
