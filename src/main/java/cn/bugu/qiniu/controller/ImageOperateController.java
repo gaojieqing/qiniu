@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FileInfo;
 
 import cn.bugu.qiniu.service.FileOperateService;
@@ -48,19 +49,24 @@ public class ImageOperateController {
 	public String getImage(@PathVariable String key) {
 		return fileOperateService.getFileUrl(key);
 	}
+	
+	@RequestMapping(value = "/images/redirect/{key}", method = RequestMethod.GET)
+	public String redirect(@PathVariable String key) {
+		return "redirect:" + fileOperateService.getFileUrl(key);
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/images", method = RequestMethod.POST)
-	public FileInfo postImage(@RequestParam(value = "file") MultipartFile image) throws IOException {
-		return fileOperateService.postFile(image.getBytes());
+	public List<DefaultPutRet> postImage(@RequestParam(value = "file[]") MultipartFile[] images) {
+		return fileOperateService.postFile(images);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/images/{key}", method = RequestMethod.POST)
-	public FileInfo postImage(@RequestParam(value = "file") MultipartFile image, @PathVariable String key)
+	public DefaultPutRet postImage(@RequestParam(value = "file") MultipartFile image, @PathVariable String key)
 			throws IOException {
 		if (key == null || "".equals(key)) {
-			return fileOperateService.postFile(image.getBytes());
+			return fileOperateService.putFile(image.getBytes(), null);
 		}
 		return fileOperateService.putFile(image.getBytes(), key);
 	}

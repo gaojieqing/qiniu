@@ -52,12 +52,12 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-	<form action="http://localhost:8080/qiniu/images/123" method="post" enctype="multipart/form-data">
-		<input id="localFilePath1" name="file" type="file" />
+	<form action="http://localhost:8080/qiniu/images" method="post" enctype="multipart/form-data">
+		<input id="localFilePath1" name="file[]" type="file" />
 		<br />
-		<input id="localFilePath2" name="file[1]" type="file" />
+		<input id="localFilePath2" name="file[]" type="file" />
 		<br />
-		<input id="localFilePath3" name="file[2]" type="file" />
+		<input id="localFilePath3" name="file[]" type="file" />
 		<br />
 		<br />
 		<input type="button" id="upload1" value="客户端上传" />

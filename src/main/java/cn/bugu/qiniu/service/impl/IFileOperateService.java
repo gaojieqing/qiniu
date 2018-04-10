@@ -2,6 +2,9 @@ package cn.bugu.qiniu.service.impl;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FileInfo;
 
 public interface IFileOperateService {
@@ -16,9 +19,9 @@ public interface IFileOperateService {
 
 	public String getFileUrl(String key);
 	
-	public FileInfo postFile(byte[] bytes);
+	public List<DefaultPutRet> postFile(MultipartFile[] images);
 	
-	public FileInfo putFile(byte[] bytes,String key);
+	public DefaultPutRet putFile(byte[] bytes,String key);
 
 	public void deleteFile(String key);
 	

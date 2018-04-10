@@ -16,6 +16,8 @@ public class ConfigConstants {
 	public String BUCKET_NAME;
 	@Value("${qiniu.bucket_domain}")
 	public String BUCKET_DOMAIN;
+	@Value("${qiniu.bucket_watermark}")
+	public String BUCKET_WATERMARK;
 	@Value("${qiniu.bucket_control}")
 	public String BUCKET_CONTROL;
 	@Value("${qiniu.expire_seconds}")
