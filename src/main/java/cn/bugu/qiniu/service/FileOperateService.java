@@ -24,6 +24,7 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
+import com.qiniu.util.StringMap;
 
 import cn.bugu.qiniu.dao.FileDao;
 import cn.bugu.qiniu.service.impl.IFileOperateService;
@@ -103,10 +104,11 @@ public class FileOperateService implements IFileOperateService {
 			e.printStackTrace();
 		}
 		logger.info("get file info.");
-	    logger.info("hash: " + fileInfo.hash);
-	    logger.info("fsize: " + fileInfo.fsize);
-	    logger.info("mimeType: " + fileInfo.mimeType);
-	    logger.info("putTime: " + fileInfo.putTime);
+		logger.info("fileInfo.key: " + fileInfo.key);
+	    logger.info("fileInfo.hash: " + fileInfo.hash);
+	    logger.info("fileInfo.fsize: " + fileInfo.fsize);
+	    logger.info("fileInfo.mimeType: " + fileInfo.mimeType);
+	    logger.info("fileInfo.putTime: " + fileInfo.putTime);
 		
 		return fileInfo;
 	}
@@ -147,6 +149,8 @@ public class FileOperateService implements IFileOperateService {
 
 		// 密钥配置
 		Auth auth = Auth.create(constants.ACCESS_KEY, constants.SECRET_KEY);
+		StringMap putPolicy = new StringMap();
+		putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fsize\":$(fsize),\"mimeType\":$(mimeType),\"endUser\":$(endUser)}");
 		String upToken = auth.uploadToken(constants.BUCKET_NAME, key);
 		
 		BucketManager bucketManager = new BucketManager(auth, cfg);
@@ -164,11 +168,22 @@ public class FileOperateService implements IFileOperateService {
 			
 			fileInfo = bucketManager.stat(constants.BUCKET_NAME, putRet.key);
 			
-			fileDao.insert(fileInfo);
+			cn.bugu.qiniu.model.FileInfo info = new cn.bugu.qiniu.model.FileInfo();
+			info.setKey(putRet.key);
+			
+			fileDao.insert(info);
 			
 			logger.info("upload file.");
-			logger.info("key: " + putRet.key);
-			logger.info("hash: " + putRet.hash);
+			logger.info("putRet.key: " + putRet.key);
+			logger.info("putRet.hash: " + putRet.hash);
+			
+			logger.info("get upload file info.");
+			logger.info("fileInfo.key: " + fileInfo.key);
+		    logger.info("fileInfo.hash: " + fileInfo.hash);
+		    logger.info("fileInfo.fsize: " + fileInfo.fsize);
+		    logger.info("fileInfo.mimeType: " + fileInfo.mimeType);
+		    logger.info("fileInfo.putTime: " + fileInfo.putTime);
+			
 		} catch (QiniuException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -187,6 +202,7 @@ public class FileOperateService implements IFileOperateService {
 		BucketManager bucketManager = new BucketManager(auth, cfg);
 		try {
 			bucketManager.delete(constants.BUCKET_NAME, key);
+			fileDao.delete(key);
 			
 		} catch (QiniuException ex) {
 			// 如果遇到异常，说明删除失败

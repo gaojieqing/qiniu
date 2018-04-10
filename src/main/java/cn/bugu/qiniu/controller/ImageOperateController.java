@@ -48,17 +48,11 @@ public class ImageOperateController {
 	public String getImage(@PathVariable String key) {
 		return fileOperateService.getFileUrl(key);
 	}
-	
-	public class Pojo {
-		private List<String> file;
-	}
 
 	@ResponseBody
 	@RequestMapping(value = "/images", method = RequestMethod.POST)
-	public FileInfo postImage(Pojo pojo) throws IOException {
-		return null;
-		//System.out.println(image[0]);
-		//return fileOperateService.postFile(image[0].getBytes());
+	public FileInfo postImage(@RequestParam(value = "file") MultipartFile image) throws IOException {
+		return fileOperateService.postFile(image.getBytes());
 	}
 
 	@ResponseBody

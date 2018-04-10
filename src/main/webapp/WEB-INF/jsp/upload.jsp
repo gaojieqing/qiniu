@@ -12,9 +12,7 @@ $(document).ready(function(){
 		var timestamp = Date.parse(new Date());
 		$("#timestamp").val(timestamp);
 		$.get("http://localhost:8080/qiniu/upToken/" + $("#timestamp").val(), function(token){
-			var file1 = $("#localFilePath1").get(0).files[0];
-			var reader = new FileReader(); //新建一个FileReader
-	        reader.readAsDataURL(f);  // 读取文件base64数据
+			var file = $("#localFilePath1").get(0).files[0];
 			var key = $("#timestamp").val();
 			var observable = qiniu.upload(file, key, token, { mimeType: ["image/png", "image/jpeg", "image/gif"] }, null);
 			var observer = {
@@ -54,12 +52,12 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-	<form action="http://localhost:8080/qiniu/images" method="post" >
-		<input id="localFilePath1" name="file[0]" type="text" />
+	<form action="http://localhost:8080/qiniu/images/123" method="post" enctype="multipart/form-data">
+		<input id="localFilePath1" name="file" type="file" />
 		<br />
-		<input id="localFilePath2" name="file[1]" type="text" />
+		<input id="localFilePath2" name="file[1]" type="file" />
 		<br />
-		<input id="localFilePath3" name="file[2]" type="text" />
+		<input id="localFilePath3" name="file[2]" type="file" />
 		<br />
 		<br />
 		<input type="button" id="upload1" value="客户端上传" />

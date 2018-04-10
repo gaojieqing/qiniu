@@ -1,6 +1,6 @@
 package cn.bugu.qiniu.dao;
 
-import com.qiniu.storage.model.FileInfo;
+import cn.bugu.qiniu.model.FileInfo;
 
 public interface FileDao {
 
